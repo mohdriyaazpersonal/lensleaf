@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="A private browser-based photo gallery with collections, favorites and a full-screen viewer."
+    />
+    <title>Lensleaf — a home for your favorite frames</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#gallery-main">Skip to gallery</a>
+    <header>
+      <a class="brand" href="./"
+        ><span class="brand-icon">◉</span>lensleaf<span class="brand-dot"
+          >.</span
+        ></a
+      ><span class="header-note">YOUR MOMENTS, IN GOOD COMPANY.</span
+      ><button id="upload-top" class="primary">+ Add photographs</button>
+    </header>
+    <div class="layout">
+      <aside>
+        <p class="eyebrow">YOUR LIBRARY</p>
+        <button class="nav-item active" data-all>
+          ▦ <span>All photographs</span><small id="all-count">0</small></button
+        ><button class="nav-item" id="favorites">
+          ♡ <span>Favorites</span><small id="fav-count">0</small>
+        </button>
+        <p class="eyebrow collection-label">COLLECTIONS</p>
+        <nav id="collections" aria-label="Photo collections"></nav>
+        <div class="sidebar-card">
+          <span>✦</span>
+          <h3>Keep what moves you.</h3>
+          <p>The everyday, the unexpected, the places you return to.</p>
+        </div>
+        <div class="storage-block">
+          <span class="storage-indicator"></span
+          ><span>Stored on this device</span>
+          <p>
+            Your uploads stay in this browser. Keep your original photo files.
+          </p>
+          <button id="clear">Clear gallery data</button>
+        </div>
+      </aside>
+      <main id="gallery-main">
+        <section class="hero">
+          <div>
+            <p class="eyebrow">A CURATED CORNER OF YOUR WORLD</p>
+            <h1>Every frame,<br />a little feeling.</h1>
+            <p>
+              A quiet space for the moments you want to keep.<br />Collect,
+              organize, and see them a little differently.
+            </p>
+          </div>
+          <div class="hero-counter">
+            <span>✧</span><strong id="hero-count">06</strong
+            ><small>MOMENTS & COUNTING</small>
+          </div>
+        </section>
+        <div class="gallery-heading">
+          <div>
+            <h2 id="gallery-title">All photographs</h2>
+            <span id="result-count" class="muted" aria-live="polite"></span>
+          </div>
+          <div class="tools">
+            <label
+              ><span class="sr-only">Search photographs</span
+              ><input
+                id="search"
+                type="search"
+                placeholder="Search your moments…" /></label
+            ><label
+              ><span class="sr-only">Filter by tag</span
+              ><select id="tags">
+                <option value="">All tags</option>
+              </select></label
+            ><label
+              ><span class="sr-only">Sort photographs</span
+              ><select id="sort">
+                <option value="newest">Newest first</option>
+                <option value="title">Title A—Z</option>
+              </select></label
+            >
+          </div>
+        </div>
+        <p class="demo-note">
+          The starter collection is original SVG demo artwork. Add your own
+          photographs to make this yours.
+        </p>
+        <div id="drop-zone">
+          <div id="gallery" class="gallery" aria-label="Photographs"></div>
+          <div id="empty" class="empty" hidden>
+            <h3>A fresh frame awaits.</h3>
+            <p>Add photographs, or try another filter.</p>
+            <button id="restore">Restore demo artwork</button>
+          </div>
+          <div class="drop-hint">
+            Drop photographs anywhere in this area to add them · JPG, PNG, WebP,
+            GIF, AVIF · 20 MB each
+          </div>
+        </div>
+        <footer>
+          <span>Made for the moments between the milestones.</span
+          ><span>Built with Codex · Local storage</span>
+        </footer>
+      </main>
+    </div>
+    <dialog id="upload-dialog" aria-labelledby="upload-title">
+      <form id="upload-form">
+        <h2 id="upload-title">Make room for new moments.</h2>
+        <label
+          >Photographs<input
+            id="files"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+            multiple
+        /></label>
+        <p id="file-summary" class="muted">Choose one or more image files.</p>
+        <label
+          >Collection<input
+            name="collection"
+            list="collection-options"
+            required
+            maxlength="80"
+            value="My photographs" /></label
+        ><datalist id="collection-options"></datalist
+        ><label
+          >Tags, separated by commas<input
+            name="tags"
+            maxlength="480"
+            placeholder="travel, summer, home"
+        /></label>
+        <div class="row">
+          <button id="upload-submit" class="primary">Add to my gallery</button
+          ><button type="button" data-close>Cancel</button>
+        </div>
+        <p class="form-note muted">
+          Images are saved in this browser's IndexedDB. They are not uploaded to
+          a server.
+        </p>
+      </form>
+    </dialog>
+    <dialog id="lightbox" aria-labelledby="lightbox-title">
+      <div class="lightbox-top">
+        <span id="lightbox-label"></span
+        ><button id="close-lightbox" aria-label="Close image viewer">×</button>
+      </div>
+      <div class="image-stage">
+        <button id="previous" aria-label="Previous photograph">←</button
+        ><img id="lightbox-image" alt="" /><button
+          id="next"
+          aria-label="Next photograph"
+        >
+          →
+        </button>
+      </div>
+      <div class="lightbox-bottom">
+        <div>
+          <h2 id="lightbox-title"></h2>
+          <p id="lightbox-meta"></p>
+        </div>
+        <div class="row wrap">
+          <button id="lightbox-favorite">♡ Favorite</button
+          ><button id="edit-photo">Edit details</button
+          ><button id="delete-photo">Delete</button>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="edit-dialog" aria-labelledby="edit-title">
+      <form id="edit-form">
+        <h2 id="edit-title">The details matter.</h2>
+        <label>Title<input name="title" required maxlength="160" /></label
+        ><label
+          >Collection<input
+            name="collection"
+            required
+            maxlength="80"
+            list="collection-options" /></label
+        ><label
+          >Tags, separated by commas<input name="tags" maxlength="480"
+        /></label>
+        <div class="row">
+          <button class="primary">Save details</button
+          ><button type="button" data-close>Cancel</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
